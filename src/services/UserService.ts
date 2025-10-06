@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import UserModel, {UserRegisterDTO} from "../models/UserModel.js";
-import {Role, Status, User} from "../generated/prisma/client.js";
-import HttpError from "../HttpError.js";
+import UserModel, {UserRegisterDTO} from "../models/UserModel.ts";
+import {Role, Status, User} from "../generated/prisma/client.ts";
+import HttpError from "../HttpError.ts";
 
 class UserService {
     private userModel: UserModel;

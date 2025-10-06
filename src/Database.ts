@@ -1,4 +1,4 @@
-import {PrismaClient} from "./generated/prisma/client.js";
+import {PrismaClient} from "./generated/prisma/client.ts";
 
 class Database {
     private static instance_: Database;

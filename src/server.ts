@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
-import Routes from "./Routes.js";
-import ErrorHandlingMiddleware from "./middlewares/ErrorHandlingMiddleware.js";
+import Routes from "./Routes.ts";
+import ErrorHandlingMiddleware from "./middlewares/ErrorHandlingMiddleware.ts";
 
 dotenv.config();
 

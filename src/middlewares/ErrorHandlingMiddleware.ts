@@ -1,6 +1,6 @@
 import express from "express";
-import Middleware from "./Middleware.js";
-import HttpError from "../HttpError.js";
+import Middleware from "./Middleware.ts";
+import HttpError from "../HttpError.ts";
 
 class ErrorHandlingMiddleware extends Middleware {
     public execute = (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

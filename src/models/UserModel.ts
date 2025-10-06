@@ -1,6 +1,6 @@
-import Model from "./Model.js";
-import {Role, User} from "../generated/prisma/client.js";
-import {UserWhereUniqueInput} from "../generated/prisma/models/User.js";
+import Model from "./Model.ts";
+import {Role, User} from "../generated/prisma/client.ts";
+import {UserWhereUniqueInput} from "../generated/prisma/models/User.ts";
 
 export type UserRegisterDTO = {
     fullname: string;
@@ -13,7 +13,6 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@example.com";
 class UserModel extends Model<User> {
     public create(data: UserRegisterDTO) {
         this.validate(data, ["fullname", "password", "email"]);
-
         return this.db.prisma().user.create({
             data: {
                 ...data,

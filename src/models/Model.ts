@@ -1,4 +1,4 @@
-import Database from "../Database.js";
+import Database from "../Database.ts";
 
 abstract class Model<T> {
     protected db: Database;

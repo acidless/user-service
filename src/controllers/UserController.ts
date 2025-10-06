@@ -1,6 +1,6 @@
 import express from "express";
-import UserService from "../services/UserService.js";
-import {jwtSign} from "../JWT.js";
+import UserService from "../services/UserService.ts";
+import {jwtSign} from "../JWT.ts";
 
 class UserController {
     private userService: UserService;

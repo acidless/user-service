@@ -1,8 +1,8 @@
 import express from "express";
-import {jwtVerify} from "../JWT.js";
-import UserModel from "../models/UserModel.js";
-import HttpError from "../HttpError.js";
-import {Status} from "../generated/prisma/enums.js";
+import {jwtVerify} from "../JWT.ts";
+import UserModel from "../models/UserModel.ts";
+import HttpError from "../HttpError.ts";
+import {Status} from "../generated/prisma/enums.ts";
 
 class AuthMiddleware {
     private userModel: UserModel;
