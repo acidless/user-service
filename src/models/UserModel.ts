@@ -44,6 +44,11 @@ class UserModel extends Model<User> {
             data: user
         });
     }
+
+    public toSafeObject(user: User) {
+        const { password, ...safeUser } = user;
+        return safeUser;
+    }
 }
 
 export default UserModel;

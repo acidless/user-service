@@ -21,7 +21,11 @@ const mockUpdate = jest.fn();
     findOne: mockFindOne,
     create: mockCreate,
     getUsers: mockGetUsers,
-    update: mockUpdate
+    update: mockUpdate,
+    toSafeObject: jest.fn((obj) => ({
+        ...obj,
+        password: undefined,
+    }))
 }));
 
 describe("UserService", () => {

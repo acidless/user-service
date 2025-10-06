@@ -14,6 +14,10 @@ abstract class Model<T> {
             }
         }
     }
+
+    public toSafeObject(obj: T): Partial<T> {
+        return obj;
+    }
 }
 
 export default Model;

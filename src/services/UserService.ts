@@ -18,7 +18,7 @@ class UserService {
 
         const password = await bcrypt.hash(data.password, 10);
         const newUser = await this.userModel.create({...data, password});
-        return {...newUser, password: undefined};
+        return this.userModel.toSafeObject(newUser);
     }
 
     public async login(email: string, password: string) {
@@ -36,7 +36,7 @@ class UserService {
             throw new HttpError(400, "Неверный пароль");
         }
 
-        return {...user, password: undefined};
+        return this.userModel.toSafeObject(user);
     }
 
     public async getUserById(currentUser: User, targetId: number) {
@@ -47,7 +47,7 @@ class UserService {
             throw new HttpError(404, "Пользователь не найден");
         }
 
-        return {...user, password: undefined};
+        return this.userModel.toSafeObject(user);
     }
 
     public async getUsers(currentUser: User, page: number) {
@@ -56,7 +56,7 @@ class UserService {
 
 
         const users = await this.userModel.getUsers(page * USERS_PER_PAGE, USERS_PER_PAGE);
-        return users.map((user: User) => ({...user, password: undefined}));
+        return users.map((user: User) => this.userModel.toSafeObject(user));
     }
 
     public async blockUser(currentUser: User, targetId: number) {
@@ -77,7 +77,7 @@ class UserService {
             throw new HttpError(404, "Пользователь не найден");
         }
 
-        return {...user, password: undefined};
+        return this.userModel.toSafeObject(user);
     }
 
     private checkUserAccess(currentUser: User, targetId: number) {
