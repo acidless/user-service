@@ -17,50 +17,54 @@ class UserService {
         }
 
         const password = await bcrypt.hash(data.password, 10);
-        return this.userModel.create({...data, password});
+        const newUser = await this.userModel.create({...data, password});
+        return {...newUser, password: undefined};
     }
 
     public async login(email: string, password: string) {
         const user = await this.userModel.findOne({email});
-        if(!user) {
+        if (!user) {
             throw new HttpError(404, "Пользователь не найден");
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if(!passwordMatch) {
+        if (!passwordMatch) {
             throw new HttpError(400, "Неверный пароль");
         }
 
-        return user;
+        return {...user, password: undefined};
     }
 
     public async getUserById(currentUser: User, targetId: number) {
         this.checkUserAccess(currentUser, targetId);
 
         const user = await this.userModel.findOne({id: targetId});
-        if(!user) {
+        if (!user) {
             throw new HttpError(404, "Пользователь не найден");
         }
 
-        return user;
+        return {...user, password: undefined};
     }
 
     public async getUsers(isAdmin: boolean, page: number) {
         const USERS_PER_PAGE = 30;
-        if(!isAdmin) {
+        if (!isAdmin) {
             throw new HttpError(403, "У вас нет доступа к списку пользователей");
         }
 
-        return this.userModel.getUsers(page * USERS_PER_PAGE, USERS_PER_PAGE);
+        const users = await this.userModel.getUsers(page * USERS_PER_PAGE, USERS_PER_PAGE);
+        return users.map(user => ({...user, password: undefined}));
     }
 
     public async blockUser(currentUser: User, targetId: number) {
         this.checkUserAccess(currentUser, targetId);
-        return this.userModel.blockUser(targetId);
+
+        const user = await this.userModel.blockUser(targetId);
+        return {...user, password: undefined};
     }
 
     private checkUserAccess(currentUser: User, targetId: number) {
-        if(currentUser.id !== targetId && currentUser.role !== Role.ADMIN) {
+        if (currentUser.id !== targetId && currentUser.role !== Role.ADMIN) {
             throw new HttpError(403, "У вас нет доступа к этому пользователю");
         }
     }
