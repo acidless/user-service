@@ -1,6 +1,5 @@
 import express from "express";
 import UserService from "../services/UserService.js";
-import {Role} from "../generated/prisma/enums.js";
 import {jwtSign} from "../JWT.js";
 
 class UserController {
@@ -11,7 +10,9 @@ class UserController {
     }
 
     public register = async (req: express.Request, res: express.Response) => {
-        const user = await this.userService.register(req.body);
+        const {email, fullname, password} = req.body;
+
+        const user = await this.userService.register({email, fullname, password});
         const token = jwtSign({id: user.id});
 
         return res.cookie("token", token, {httpOnly: true, secure: true}).status(201).json({
@@ -31,15 +32,8 @@ class UserController {
         });
     }
 
-    public getUserById = async  (req: express.Request, res: express.Response) => {
-        const {id} = req.params;
-
-        let numId = Number(id);
-        if (id === "me") {
-            numId = (req as any).user.id;
-        }
-
-        const user = await this.userService.getUserById((req as any).user, numId);
+    public getUserById = async (req: express.Request, res: express.Response) => {
+        const user = await this.userService.getUserById((req as any).user, this.parseUserId(req));
 
         return res.status(200).json({
             success: true,
@@ -50,8 +44,7 @@ class UserController {
     public getUsers = async (req: express.Request, res: express.Response) => {
         const {page} = req.query;
 
-        const isAdmin = (req as any).user.role === Role.ADMIN;
-        const users = await this.userService.getUsers(isAdmin, page ? Number(page) : 0);
+        const users = await this.userService.getUsers((req as any).user, page ? Number(page) : 0);
 
         return res.status(200).json({
             success: true,
@@ -60,13 +53,26 @@ class UserController {
     }
 
     public blockUser = async (req: express.Request, res: express.Response) => {
-        const {id} = req.params;
-        const user = await this.userService.blockUser((req as any).user, Number(id));
+        await this.userService.blockUser((req as any).user, this.parseUserId(req));
+    }
 
+    public changeUserRole = async (req: express.Request, res: express.Response) => {
+        const {role} = req.body;
+
+        const user = await this.userService.changeRole((req as any).user, this.parseUserId(req), role);
         return res.status(200).json({
             success: true,
             user
         });
+    }
+
+    private parseUserId(req: express.Request) {
+        const {id} = req.params;
+        if (id === "me") {
+            return (req as any).user.id;
+        }
+
+        return Number(id);
     }
 }
 

@@ -13,4 +13,7 @@ router.route("/users/:id")
     .get(AuthMiddleware.execute, UserController.getUserById)
     .delete(AuthMiddleware.execute, UserController.blockUser);
 
+router.route("/users/:id/roles")
+    .patch(AuthMiddleware.execute, UserController.changeUserRole);
+
 export default router;

@@ -2,6 +2,7 @@ import express from "express";
 import {jwtVerify} from "../JWT.js";
 import UserModel from "../models/UserModel.js";
 import HttpError from "../HttpError.js";
+import {Status} from "../generated/prisma/enums.js";
 
 class AuthMiddleware {
     private userModel: UserModel;
@@ -20,6 +21,10 @@ class AuthMiddleware {
         const user = await this.userModel.findOne({id: obj.id});
         if (!user) {
             throw new HttpError(403, "Неверный токен");
+        }
+
+        if(user.status === Status.BLOCKED) {
+            throw new HttpError(403, "Ваш аккаунт заблокирован");
         }
 
         (req as any).user = user;

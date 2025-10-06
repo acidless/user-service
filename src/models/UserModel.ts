@@ -1,13 +1,24 @@
 import Model from "./Model.js";
-import {Status, User} from "../generated/prisma/client.js";
+import {Role, User} from "../generated/prisma/client.js";
 import {UserWhereUniqueInput} from "../generated/prisma/models/User.js";
 
+export type UserRegisterDTO = {
+    fullname: string;
+    email: string;
+    password: string;
+}
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@example.com";
+
 class UserModel extends Model<User> {
-    public create(data: User) {
+    public create(data: UserRegisterDTO) {
         this.validate(data, ["fullname", "password", "email"]);
 
         return this.db.prisma().user.create({
-            data
+            data: {
+                ...data,
+                role: data.email === ADMIN_EMAIL ? Role.ADMIN : Role.USER
+            }
         });
     }
 
@@ -26,14 +37,12 @@ class UserModel extends Model<User> {
         });
     }
 
-    public blockUser(id: number) {
+    public update(id: number, user: Partial<User>) {
         return this.db.prisma().user.update({
             where: {
                 id
             },
-            data: {
-                status: Status.BLOCKED
-            }
+            data: user
         });
     }
 }
