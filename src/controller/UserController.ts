@@ -1,6 +1,7 @@
 import express from "express";
 import UserService from "../services/UserService";
 import {Role} from "../generated/prisma/enums";
+import {jwtSign} from "../JWT";
 
 class UserController {
     private userService: UserService;
@@ -11,8 +12,9 @@ class UserController {
 
     public async register(req: express.Request, res: express.Response) {
         const user = await this.userService.register(req.body);
+        const token = jwtSign({id: user.id});
 
-        return res.status(201).json({
+        return res.cookie("token", token, {httpOnly: true, secure: true}).status(201).json({
             success: true,
             user
         });
@@ -21,8 +23,9 @@ class UserController {
     public async login(req: express.Request, res: express.Response) {
         const {email, password} = req.body;
         const user = await this.userService.login(email, password);
+        const token = jwtSign({id: user.id});
 
-        return res.status(200).json({
+        return res.cookie("token", token, {httpOnly: true, secure: true}).status(200).json({
             success: true,
             user
         });
@@ -61,4 +64,4 @@ class UserController {
     }
 }
 
-export default UserController;
+export default new UserController();

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import UserModel from "../models/UserModel";
 import {Role, Status, User} from "../generated/prisma/client";
 import HttpError from "../HttpError";
+import {jwtSign} from "../JWT";
 
 class UserService {
     private userModel: UserModel;
