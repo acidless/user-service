@@ -1,9 +1,11 @@
-import Model from "./Model";
-import {Status, User} from "../generated/prisma/client";
-import {UserWhereUniqueInput} from "../generated/prisma/models/User";
+import Model from "./Model.js";
+import {Status, User} from "../generated/prisma/client.js";
+import {UserWhereUniqueInput} from "../generated/prisma/models/User.js";
 
-class UserModel extends Model {
+class UserModel extends Model<User> {
     public create(data: User) {
+        this.validate(data, ["fullname", "password", "email"]);
+
         return this.db.prisma().user.create({
             data
         });

@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt";
-import UserModel from "../models/UserModel";
-import {Role, Status, User} from "../generated/prisma/client";
-import HttpError from "../HttpError";
-import {jwtSign} from "../JWT";
+import UserModel from "../models/UserModel.js";
+import {Role, User} from "../generated/prisma/client.js";
+import HttpError from "../HttpError.js";
 
 class UserService {
     private userModel: UserModel;
@@ -54,7 +53,7 @@ class UserService {
         }
 
         const users = await this.userModel.getUsers(page * USERS_PER_PAGE, USERS_PER_PAGE);
-        return users.map(user => ({...user, password: undefined}));
+        return users.map((user: User) => ({...user, password: undefined}));
     }
 
     public async blockUser(currentUser: User, targetId: number) {

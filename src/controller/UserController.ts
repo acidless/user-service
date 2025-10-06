@@ -1,7 +1,7 @@
 import express from "express";
-import UserService from "../services/UserService";
-import {Role} from "../generated/prisma/enums";
-import {jwtSign} from "../JWT";
+import UserService from "../services/UserService.js";
+import {Role} from "../generated/prisma/enums.js";
+import {jwtSign} from "../JWT.js";
 
 class UserController {
     private userService: UserService;
@@ -10,7 +10,7 @@ class UserController {
         this.userService = new UserService();
     }
 
-    public async register(req: express.Request, res: express.Response) {
+    public register = async (req: express.Request, res: express.Response) => {
         const user = await this.userService.register(req.body);
         const token = jwtSign({id: user.id});
 
@@ -20,7 +20,7 @@ class UserController {
         });
     }
 
-    public async login(req: express.Request, res: express.Response) {
+    public login = async (req: express.Request, res: express.Response) => {
         const {email, password} = req.body;
         const user = await this.userService.login(email, password);
         const token = jwtSign({id: user.id});
@@ -31,9 +31,15 @@ class UserController {
         });
     }
 
-    public async getUserById(req: express.Request, res: express.Response) {
+    public getUserById = async  (req: express.Request, res: express.Response) => {
         const {id} = req.params;
-        const user = await this.userService.getUserById((req as any).user, Number(id));
+
+        let numId = Number(id);
+        if (id === "me") {
+            numId = (req as any).user.id;
+        }
+
+        const user = await this.userService.getUserById((req as any).user, numId);
 
         return res.status(200).json({
             success: true,
@@ -41,7 +47,7 @@ class UserController {
         });
     }
 
-    public async getUsers(req: express.Request, res: express.Response) {
+    public getUsers = async (req: express.Request, res: express.Response) => {
         const {page} = req.query;
 
         const isAdmin = (req as any).user.role === Role.ADMIN;
@@ -53,7 +59,7 @@ class UserController {
         });
     }
 
-    public async blockUser(req: express.Request, res: express.Response) {
+    public blockUser = async (req: express.Request, res: express.Response) => {
         const {id} = req.params;
         const user = await this.userService.blockUser((req as any).user, Number(id));
 

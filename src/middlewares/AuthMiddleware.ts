@@ -1,7 +1,7 @@
 import express from "express";
-import {jwtVerify} from "../JWT";
-import UserModel from "../models/UserModel";
-import HttpError from "../HttpError";
+import {jwtVerify} from "../JWT.js";
+import UserModel from "../models/UserModel.js";
+import HttpError from "../HttpError.js";
 
 class AuthMiddleware {
     private userModel: UserModel;
@@ -10,11 +10,14 @@ class AuthMiddleware {
         this.userModel = new UserModel();
     }
 
-    public async execute(req: express.Request, res: express.Response, next: express.NextFunction) {
+    public execute = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const token = req.cookies.token;
-        const userId = jwtVerify(token);
+        const obj: any = jwtVerify(token);
+        if (!obj || !obj.id) {
+            throw new HttpError(403, "Вы не авторизованы");
+        }
 
-        const user = await this.userModel.findOne({id: Number(userId)});
+        const user = await this.userModel.findOne({id: obj.id});
         if (!user) {
             throw new HttpError(403, "Неверный токен");
         }
