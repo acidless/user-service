@@ -1,5 +1,6 @@
 import Model from "./Model";
 import {Status, User} from "../generated/prisma/client";
+import {UserWhereUniqueInput} from "../generated/prisma/models/User";
 
 class UserModel extends Model {
     public create(data: User) {
@@ -8,10 +9,10 @@ class UserModel extends Model {
         });
     }
 
-    public getById(id: number) {
+    public findOne(filter: UserWhereUniqueInput) {
         return this.db.prisma().user.findUnique({
             where: {
-                id
+                ...filter
             }
         });
     }
