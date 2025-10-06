@@ -54,6 +54,7 @@ class UserController {
 
     public blockUser = async (req: express.Request, res: express.Response) => {
         await this.userService.blockUser((req as any).user, this.parseUserId(req));
+        return res.status(204);
     }
 
     public changeUserRole = async (req: express.Request, res: express.Response) => {
