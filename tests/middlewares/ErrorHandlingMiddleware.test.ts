@@ -46,7 +46,7 @@ describe("ErrorHandlingMiddleware", () => {
     });
 
     it("should handle unknown error object without message", () => {
-        const error = {};
+        const error = new Error();
 
         ErrorHandlingMiddleware.execute(error, req as express.Request, res as express.Response, next);
 

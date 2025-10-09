@@ -33,7 +33,7 @@ class UserController {
     }
 
     public getUserById = async (req: express.Request, res: express.Response) => {
-        const user = await this.userService.getUserById((req as any).user, this.parseUserId(req));
+        const user = await this.userService.getUserById(req.user, this.parseUserId(req));
 
         return res.status(200).json({
             success: true,
@@ -44,7 +44,7 @@ class UserController {
     public getUsers = async (req: express.Request, res: express.Response) => {
         const {page} = req.query;
 
-        const users = await this.userService.getUsers((req as any).user, page ? Number(page) : 0);
+        const users = await this.userService.getUsers(req.user, page ? Number(page) : 0);
 
         return res.status(200).json({
             success: true,
@@ -53,14 +53,14 @@ class UserController {
     }
 
     public blockUser = async (req: express.Request, res: express.Response) => {
-        await this.userService.blockUser((req as any).user, this.parseUserId(req));
+        await this.userService.blockUser(req.user, this.parseUserId(req));
         return res.status(204);
     }
 
     public changeUserRole = async (req: express.Request, res: express.Response) => {
         const {role} = req.body;
 
-        const user = await this.userService.changeRole((req as any).user, this.parseUserId(req), role);
+        const user = await this.userService.changeRole(req.user, this.parseUserId(req), role);
         return res.status(200).json({
             success: true,
             user
@@ -69,8 +69,8 @@ class UserController {
 
     private parseUserId(req: express.Request) {
         const {id} = req.params;
-        if (id === "me") {
-            return (req as any).user.id;
+        if (id === "me" && req.user) {
+            return req.user.id;
         }
 
         return Number(id);

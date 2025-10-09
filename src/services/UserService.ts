@@ -39,7 +39,7 @@ class UserService {
         return this.userModel.toSafeObject(user);
     }
 
-    public async getUserById(currentUser: User, targetId: number) {
+    public async getUserById(currentUser: User | undefined, targetId: number) {
         this.checkUserAccess(currentUser, targetId);
 
         const user = await this.userModel.findOne({id: targetId});
@@ -50,7 +50,7 @@ class UserService {
         return this.userModel.toSafeObject(user);
     }
 
-    public async getUsers(currentUser: User, page: number) {
+    public async getUsers(currentUser: User | undefined, page: number) {
         const USERS_PER_PAGE = 30;
         this.checkUserAdmin(currentUser);
 
@@ -59,13 +59,13 @@ class UserService {
         return users.map((user: User) => this.userModel.toSafeObject(user));
     }
 
-    public async blockUser(currentUser: User, targetId: number) {
+    public async blockUser(currentUser: User | undefined, targetId: number) {
         this.checkUserAccess(currentUser, targetId);
 
         await this.userModel.update(targetId, {status: Status.BLOCKED});
     }
 
-    public async changeRole(currentUser: User, targetId: number, role: Role) {
+    public async changeRole(currentUser: User | undefined, targetId: number, role: Role) {
         this.checkUserAdmin(currentUser);
 
         if(!Object.keys(Role).includes(role)) {
@@ -80,14 +80,14 @@ class UserService {
         return this.userModel.toSafeObject(user);
     }
 
-    private checkUserAccess(currentUser: User, targetId: number) {
-        if (currentUser.id !== targetId && currentUser.role !== Role.ADMIN) {
+    private checkUserAccess(currentUser: User | undefined, targetId: number) {
+        if (currentUser?.id !== targetId && currentUser?.role !== Role.ADMIN) {
             throw new HttpError(403, "У вас нет доступа к этому пользователю");
         }
     }
 
-    private checkUserAdmin(currentUser: User) {
-        if (currentUser.role !== Role.ADMIN) {
+    private checkUserAdmin(currentUser: User | undefined) {
+        if (currentUser?.role !== Role.ADMIN) {
             throw new HttpError(403, "У вас нет доступа к этому действию");
         }
     }

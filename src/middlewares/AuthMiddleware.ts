@@ -3,11 +3,13 @@ import {jwtVerify} from "../JWT.ts";
 import UserModel from "../models/UserModel.ts";
 import HttpError from "../HttpError.ts";
 import {Status} from "../generated/prisma/enums.ts";
+import Middleware from "./Middleware.ts";
 
-class AuthMiddleware {
+class AuthMiddleware extends Middleware {
     private userModel: UserModel;
 
     public constructor() {
+        super();
         this.userModel = new UserModel();
     }
 
@@ -27,7 +29,7 @@ class AuthMiddleware {
             throw new HttpError(403, "Ваш аккаунт заблокирован");
         }
 
-        (req as any).user = user;
+        req.user = user;
         next();
     }
 }

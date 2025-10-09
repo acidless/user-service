@@ -3,7 +3,7 @@ import Middleware from "./Middleware.ts";
 import HttpError from "../HttpError.ts";
 
 class ErrorHandlingMiddleware extends Middleware {
-    public execute = (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    public execute = (err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
         console.error(err);
 
         if (err instanceof HttpError) {
