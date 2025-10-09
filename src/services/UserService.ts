@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
-import UserModel, {UserRegisterDTO} from "../models/UserModel.ts";
+import UserModel from "../models/UserModel.ts";
 import {Role, Status, User} from "../generated/prisma/client.ts";
 import HttpError from "../HttpError.ts";
+import {UserRegisterDTO} from "../validators/userValidator.js";
 
 class UserService {
     private userModel: UserModel;

@@ -1,12 +1,7 @@
 import Model from "./Model.ts";
 import {Role, User} from "../generated/prisma/client.ts";
 import {UserWhereUniqueInput} from "../generated/prisma/models/User.ts";
-
-export type UserRegisterDTO = {
-    fullname: string;
-    email: string;
-    password: string;
-}
+import {UserRegisterDTO} from "../validators/userValidator.js";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@example.com";
 
