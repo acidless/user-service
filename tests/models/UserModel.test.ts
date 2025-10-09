@@ -1,5 +1,6 @@
-import UserModel, {UserRegisterDTO} from "../../src/models/UserModel.ts";
+import UserModel from "../../src/models/UserModel.ts";
 import {Role} from "../../src/generated/prisma/client.ts";
+import {UserRegisterDTO} from "../../src/validators/userValidator.ts";
 
 const mockCreate = jest.fn();
 const mockFindUnique = jest.fn();
