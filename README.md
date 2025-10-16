@@ -1,60 +1,60 @@
 # User Service API
 
-Сервис для управления пользователями с возможностью регистрации, авторизации, просмотра профиля и управления статусом.
+A service for managing users with the ability to register, log in, view profiles, and manage status.
 
-## ✨ Возможности
-- 🔐 Авторизация пользователей с JWT и cookies
-- 👥 Получение списка пользлвателей
-- 🚫 Блокировка пользователей
-- ✅ Выдача роли
+## ✨ Features
+- 🔐 User authorization with JWT and cookies
+- 👥 Getting a list of users
+- 🚫 Blocking users
+- ✅ Assigning roles
 
 ![Express](https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=white&style=for-the-badge)
 ![TypeScript](https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=for-the-badge)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![Prisma](https://img.shields.io/badge/SQLite-4169E1?logo=sqlite&logoColor=fff&style=for-the-badge)
 
-## 🚀 Установка и запуск
+## 🚀 Install
 
-1. Клонируйте репозиторий
+1. Clone repository
 ```bash
 git clone https://github.com/acidless/user-service.git
 cd user-service
 ```
-2. Установите зависимости
+2. Install dependencies
 ```bash
 npm install
 ```
-3. Вы можете настроить окружение, создав файл .env в корне проекта<br>
-Параметры окружения по умолчанию:
+3. You can configure the environment by creating a .env file in the project root.
+Default environment parameters:
 ```.env
 PORT=3000
 ADMIN_EMAIL=admin@example.com
 SECRET=secret
 ```
-4. Запуск сервера
+4. Start server
 ```bash
 npm start
 ```
 
-## 📦 Модель пользователя
+## 📦 User model
 
-Каждый пользователь содержит следующие поля:
+Each user contains the following fields:
 
-| Поле | Тип | Описание |
-|------|-----|----------|
-| id | number | Идентификатор |
-| fullname | string | ФИО пользователя |
-| email | string | Email, уникальное значение |
-| password | string | Пароль (в хешированном виде) |
-| role | string | Роль пользователя: `admin` или `user` |
-| status | string | Статус пользователя: активен/не активен |
+| Field | Type | Description |
+|------|-----|--------- -|
+| id | number | Identifier |
+| fullname | string | User's full name |
+| email | string | Email, unique value |
+| password | string | Password (hashed) |
+| role | string | User role: `admin` or `user` |
+| status | string | User status: active/inactive |
 
 ## 🔗 API Endpoints
 
-### 1. Регистрация пользователя
+### 1. Register user
 
 **POST** `/api/users`  
-**Тело запроса:**
+**Body:**
 
 ```json
 {
@@ -64,7 +64,7 @@ npm start
 }
 ```
 
-**Ответ:**
+**Response:**
 ```json
 {
     "success": true,
@@ -77,12 +77,12 @@ npm start
     }
 }
 ```
-Для регистрации администратором нужно использовать почту из переменной окружения ADMIN_EMAIL 
+To register as an administrator, you need to use the email address from the ADMIN_EMAIL environment variable.
 
-### 2. Авторизация пользователя
+### 2. Authorize user
 
 **PATCH** `/api/users`  
-**Тело запроса:**
+**Body:**
 
 ```json
 {
@@ -91,7 +91,7 @@ npm start
 }
 ```
 
-**Ответ:**
+**Response:**
 ```json
 {
     "success": true,
@@ -105,12 +105,12 @@ npm start
 }
 ```
 
-### 3. Получение пользователя по ID
+### 3. Get user by ID
 
 **GET** `/api/users/:id`  
-**Доступ:** админ или пользователь сам себя
+**Access:** admin or yourself
 
-**Ответ:**
+**Response:**
 ```json
 {
     "success": true,
@@ -124,18 +124,18 @@ npm start
 }
 ```
 
-### 4. Получение списка пользователей
+### 4. Get list of users
 
 **GET** `/api/users`  
-**Доступ:** только админ  
+**Access:** only admin
 
-**Query параметры:**
+**Query params:**
 
-| Параметр | Тип | Описание |
+| Parameter | Type | Description |
 |-----------|-----|----------|
-| page      | number | Номер страницы для постраничной выдачи (опционально, по умолчанию 0) |
+| page      | number | Page number for paginated output (optional, default is 0) |
 
-**Ответ:**
+**Response:**
 
 ```json
 {
@@ -153,17 +153,17 @@ npm start
 }
 ```
 
-### 5. Блокировка пользователя
+### 5. Block users
 
 **DELETE** `/api/users/:id/`<br>
-**Доступ:** админ или пользователь сам себя
+**Access:** admin or yourself
 
-### 6. Установка роли пользователю
+### 6. Set user role
 
 **PATCH** `/api/users/:id/roles`<br>
-**Доступ:** только админ
+**Access:** only admin
 
-**Тело запроса:**
+**Body:**
 
 ```jsonc
 {
@@ -171,7 +171,7 @@ npm start
 }
 ```
 
-**Ответ:**
+**Response:**
 
 ```json
 {
@@ -186,5 +186,5 @@ npm start
 }
 ```
 
-## 📜 Лицензия
+## 📜 License
 MIT License © 2025
